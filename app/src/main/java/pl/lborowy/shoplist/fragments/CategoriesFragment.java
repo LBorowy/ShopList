@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.activeandroid.query.Select;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,13 +43,11 @@ public class CategoriesFragment extends Fragment {
     }
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_categories, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -52,14 +55,46 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        refreshOutput();
 
+
+    }
+
+    private void refreshOutput() {
+        // tworzenie SELECTA
+        List<Category> categoriesList = new Select().from(Category.class).execute(); // lista
+        StringBuilder builder = new StringBuilder();
+        for (Category category : categoriesList) {
+            builder.append(category.toString());
+            builder.append("\n");
+        }
+
+        outputText.setText(builder.toString());
     }
 
     @OnClick(R.id.categoryFragment_addButton)
     public void clickSaveButton() {
-        Category category = new Category();
-        category.setName("kategoria");
-        category.save();
+        String newCatName = categoryName.getText().toString();
+        List<Category> models = new Select().from(Category.class)
+                .where(Category.COLUMN_NAME + " like ?", newCatName)
+                .execute();
+        int count = models.size();
+
+        if (count == 0) {
+
+            Category category = new Category();
+            category.setName(categoryName.getText().toString());
+            category.save();
+            categoryName.setText(newCatName);
+        } else {
+            showToast("This category exist!");
+        }
+
+        refreshOutput();
+    }
+
+    private void showToast(String s) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
