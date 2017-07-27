@@ -7,5 +7,14 @@ import com.activeandroid.Model;
  */
 
 public class Category extends Model {
-    
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
