@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import pl.lborowy.shoplist.fragments.CategoriesFragment;
 import pl.lborowy.shoplist.fragments.SettingsFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements CategoriesFragment.InteractionListener{
     private static final int EXTERNAL_STORAGE_REQUEST_CODE = 1500;
     private String currentPath;
 
@@ -21,7 +22,11 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        openSettingsFragment();
+        openCategoriesFragment();
+    }
+
+    private void openCategoriesFragment() {
+        openFragment(new CategoriesFragment(), false); // nie chcemy wracac (ma byc glowna strona)
     }
 
 
@@ -44,5 +49,10 @@ public class MainActivity extends BaseActivity {
 
     private void openSettingsFragment() {
         openFragment(new SettingsFragment(), false);
+    }
+
+    @Override
+    public void doNothing() {
+
     }
 }
