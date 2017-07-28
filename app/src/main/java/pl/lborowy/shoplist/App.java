@@ -6,6 +6,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 
 import pl.lborowy.shoplist.models.Category;
+import pl.lborowy.shoplist.models.Product;
 
 /**
  * Created by RENT on 2017-07-27.
@@ -22,6 +23,7 @@ public class App extends Application { // obiekt App, ktory dziedziczy po Applic
     private Configuration createActiveAndroidConfiguration() {
         Configuration.Builder configuration = new Configuration.Builder(this);
         configuration.addModelClass(Category.class);
+        configuration.addModelClass(Product.class);
         return configuration.create();
     }
 }

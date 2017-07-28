@@ -85,7 +85,8 @@ public class CategoriesFragment extends Fragment {
             Category category = new Category();
             category.setName(categoryName.getText().toString());
             category.save();
-            categoryName.setText(newCatName);
+//            categoryName.setText(newCatName);
+            categoryName.setText("");
         } else {
             showToast("This category exist!");
         }

@@ -10,9 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import pl.lborowy.shoplist.fragments.CategoriesFragment;
+import pl.lborowy.shoplist.fragments.ProductsFragment;
 import pl.lborowy.shoplist.fragments.SettingsFragment;
 
-public class MainActivity extends BaseActivity implements CategoriesFragment.InteractionListener{
+public class MainActivity extends BaseActivity implements CategoriesFragment.InteractionListener, ProductsFragment.InteractionListener{
     private static final int EXTERNAL_STORAGE_REQUEST_CODE = 1500;
     private String currentPath;
 
@@ -53,6 +54,11 @@ public class MainActivity extends BaseActivity implements CategoriesFragment.Int
 
     @Override
     public void doNothing() {
+
+    }
+
+    @Override
+    public void addNewProduct() {
 
     }
 }
