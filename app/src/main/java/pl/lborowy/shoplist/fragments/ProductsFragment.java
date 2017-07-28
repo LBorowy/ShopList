@@ -20,24 +20,24 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.lborowy.shoplist.R;
-import pl.lborowy.shoplist.adapters.ProductAdapter;
+import pl.lborowy.shoplist.adapters.ProductsAdapter;
+import pl.lborowy.shoplist.dialogs.AddProductDialog;
 import pl.lborowy.shoplist.models.Product;
 
 
 public class ProductsFragment extends Fragment {
-
-
     private InteractionListener mListener;
-
-    private ProductAdapter productAdapter;
-    private List<Product> productList;
 
     @BindView(R.id.productsFragment_recyclerView)
     RecyclerView recyclerView;
 
     @BindView(R.id.productsFragment_addButton)
     FloatingActionButton addButton;
+
+    private List<Product> productsList;
+    private ProductsAdapter productsAdapter;
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -46,7 +46,6 @@ public class ProductsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_products, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -54,13 +53,14 @@ public class ProductsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         loadProducts();
     }
 
     private void loadProducts() {
-        productList = new Select().from(Product.class).execute();
-        productAdapter = new ProductAdapter(getActivity(), productList);
-        recyclerView.setAdapter(productAdapter);
+        productsList = new Select().from(Product.class).execute();
+        productsAdapter = new ProductsAdapter(getActivity(), productsList);
+        recyclerView.setAdapter(productsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
@@ -75,16 +75,27 @@ public class ProductsFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.productsFragment_addButton)
+    public void addProductClick() {
+        AddProductDialog dialog = new AddProductDialog();
+        dialog.setListener(new AddProductDialog.OnProductAdded() {
+            @Override
+            public void onProductAdded() {
+                loadProducts();
+            }
+        });
+        dialog.show(getFragmentManager(), null);
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        productAdapter = null;
-        productList = null;
+        productsAdapter = null;
+        productsList = null;
     }
 
-
     public interface InteractionListener {
-        void addNewProduct();
+        void addedNewProduct();
     }
 }

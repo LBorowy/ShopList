@@ -22,8 +22,6 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.productItem_checkBox)
     public CheckBox checkBox;
 
-
-
     public ProductViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);

@@ -10,11 +10,17 @@ import com.activeandroid.annotation.Table;
 
 //@Table(name = "Categories")
 public class Category extends Model {
-
     public static final String COLUMN_NAME = "cname";
 
-    @Column(name = COLUMN_NAME, notNull = true) // cname - kolumna w naszej tabeli, a name w apce/kod/
+    @Column(name = COLUMN_NAME, notNull = true)
     private String name;
+
+    public Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -26,6 +32,9 @@ public class Category extends Model {
 
     @Override
     public String toString() {
-        return "Category " + name;
+        return "Category{" +
+                "id='" + getId() + '\'' +
+                "name='" + name + '\'' +
+                '}';
     }
 }

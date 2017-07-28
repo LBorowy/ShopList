@@ -25,8 +25,6 @@ import pl.lborowy.shoplist.models.Category;
 
 
 public class CategoriesFragment extends Fragment {
-
-
     private InteractionListener mListener;
 
     @BindView(R.id.categoriesFragment_categoryName)
@@ -42,11 +40,9 @@ public class CategoriesFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -55,47 +51,44 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         refreshOutput();
-
-
     }
 
     private void refreshOutput() {
-        // tworzenie SELECTA
-        List<Category> categoriesList = new Select().from(Category.class).execute(); // lista
+        List<Category> categories = new Select().from(Category.class).execute();
         StringBuilder builder = new StringBuilder();
-        for (Category category : categoriesList) {
+        for (Category category : categories) {
             builder.append(category.toString());
-            builder.append("\n");
+            builder.append("\n\n");
         }
-
         outputText.setText(builder.toString());
     }
 
     @OnClick(R.id.categoryFragment_addButton)
     public void clickSaveButton() {
-        String newCatName = categoryName.getText().toString();
-        List<Category> models = new Select().from(Category.class)
-                .where(Category.COLUMN_NAME + " like ?", newCatName)
-                .execute();
-        int count = models.size();
-
-        if (count == 0) {
-
-            Category category = new Category();
-            category.setName(categoryName.getText().toString());
-            category.save();
-//            categoryName.setText(newCatName);
-            categoryName.setText("");
-        } else {
-            showToast("This category exist!");
-        }
-
+        String newCatName = categoryName.getText().toString().trim();
+        if (categoryExists(newCatName))
+            createCategory(newCatName);
+        else
+            showToast("This category exists!");
         refreshOutput();
     }
 
+    private void createCategory(String newCatName) {
+        Category category = new Category();
+        category.setName(newCatName);
+        category.save();
+    }
+
+    private boolean categoryExists(String newCatName) {
+        return new Select().from(Category.class)
+                .where(Category.COLUMN_NAME + " like ?", newCatName)
+                .count() == 0;
+    }
+
     private void showToast(String s) {
-        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -114,7 +107,6 @@ public class CategoriesFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface InteractionListener {
         void doNothing();

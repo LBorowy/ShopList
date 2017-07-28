@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import java.util.List;
 
@@ -16,12 +17,12 @@ import pl.lborowy.shoplist.viewHolders.ProductViewHolder;
  * Created by RENT on 2017-07-28.
  */
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
+public class ProductsAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
     private final LayoutInflater inflater;
     private List<Product> productList;
 
-    public ProductAdapter(Context context, List<Product> productList) {
+    public ProductsAdapter(Context context, List<Product> productList) {
         this.productList = productList;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -34,14 +35,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
-        Product product = productList.get(position);
-        holder.checkBox.setChecked(product.getPurchased());
-        //// TODO: 2017-07-28 more details
-        holder.details.setText(product.getName());
+        final Product product = productList.get(position);
+        Integer isPurchased = product.getIsPurchased();
+        if(isPurchased!=null)
+            holder.checkBox.setChecked(isPurchased != 0);
+
+        //// TODO: 28.07.2017 more details
+        holder.details.setText(product.getDetails());
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                product.setIsPurchased(isChecked ? 1 : 0);
+                product.save();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return productList.size();
     }
 }
