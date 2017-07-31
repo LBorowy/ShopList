@@ -3,8 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.lborowy.shoplist.MainActivity">
     <item
+        android:id="@+id/action_products"
+        android:orderInCategory="101"
+        android:title="Products"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_categories"
+        android:orderInCategory="102"
+        android:title="Categories"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_report"
+        android:orderInCategory="103"
+        android:title="Report"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="104"
         android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="105"
+        android:title="Exit"
         app:showAsAction="never" />
 </menu>

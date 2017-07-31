@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import pl.lborowy.shoplist.fragments.CategoriesFragment;
 import pl.lborowy.shoplist.fragments.ProductsFragment;
+import pl.lborowy.shoplist.fragments.ReportFragment;
 import pl.lborowy.shoplist.fragments.SettingsFragment;
 
 public class MainActivity extends BaseActivity implements CategoriesFragment.InteractionListener,
@@ -23,13 +24,6 @@ public class MainActivity extends BaseActivity implements CategoriesFragment.Int
         openProductsFragment();
     }
 
-    private void openProductsFragment() {
-        openFragment(new ProductsFragment(), false);
-    }
-
-    private void openCategoriesFragment() {
-        openFragment(new CategoriesFragment(), false);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,12 +37,40 @@ public class MainActivity extends BaseActivity implements CategoriesFragment.Int
             case R.id.action_settings:
                 openSettingsFragment();
                 return true;
+
+            case R.id.action_categories:
+                openCategoriesFragment();
+                return true;
+
+            case R.id.action_products:
+                openProductsFragment();
+                return true;
+
+            case R.id.action_report:
+                openReportFragment();
+                return true;
+
+            case R.id.action_exit:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void openReportFragment() {
+        openFragment(new ReportFragment(), true);
+    }
+
     private void openSettingsFragment() {
-        openFragment(new SettingsFragment(), false);
+        openFragment(new SettingsFragment(), true);
+    }
+
+    private void openProductsFragment() {
+        openFragment(new ProductsFragment(), true);
+    }
+
+    private void openCategoriesFragment() {
+        openFragment(new CategoriesFragment(), true);
     }
 
     @Override
@@ -60,4 +82,12 @@ public class MainActivity extends BaseActivity implements CategoriesFragment.Int
     public void addedNewProduct() {
 
     }
+
+//    @Override // nadpisanie aplikacji prze nacieksaniu przycisku wstecz
+//    public void onBackPressed() {
+//        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//            getSupportFragmentManager().popBackStack();
+//        }
+//        super.onBackPressed();
+//    }
 }

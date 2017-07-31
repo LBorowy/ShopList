@@ -62,7 +62,7 @@ public class AddProductDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         categories = new Select().from(Category.class).execute();
-        spinnerAdapter = new CategorySpinnerAdapter(getActivity().getApplicationContext(), categories);
+        spinnerAdapter = new CategorySpinnerAdapter(getActivity(), categories);
         categorySpinner.setAdapter(spinnerAdapter);
     }
 
