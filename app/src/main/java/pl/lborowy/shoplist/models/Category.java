@@ -8,9 +8,9 @@ import com.activeandroid.annotation.Table;
  * Created by RENT on 2017-07-27.
  */
 
-//@Table(name = "Categories")
+@Table(name = "categories")
 public class Category extends Model {
-    public static final String COLUMN_NAME = "cname";
+    public static final String COLUMN_NAME = "cname"; // !!!
 
     @Column(name = COLUMN_NAME, notNull = true)
     private String name;

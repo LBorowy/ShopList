@@ -10,10 +10,14 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.lborowy.shoplist.R;
+import pl.lborowy.shoplist.models.Category;
 import pl.lborowy.shoplist.models.Product;
+import pl.lborowy.shoplist.utils.DbHelper;
 
 /**
  * Created by RENT on 2017-07-31.
@@ -41,16 +45,51 @@ public class ReportFragment extends Fragment{
     private void loadReport() {
         int purchasedItems = getPurchasedItemsCount();
         int allItems = getAllItemsCount();
+        showPurchasedInfo(purchasedItems, allItems);
+        List<Category> categories = new Select().from(Category.class).execute();
+        for(Category category : categories)
+            appendCategoryTotalCosts(category);
+        appendTotalCosts();
+    }
 
+    private void appendCategoryTotalCosts(Category category) {
+        double fruitsTotalCosts = DbHelper.getCostsOfCategory(category.getName());
+        if (fruitsTotalCosts != 0) {
+            outputText.append(String.format("\n%s costs: %.2f PLN", category.getName(), fruitsTotalCosts));
+        }
+    }
+
+    private void appendTotalCosts() {
+        double totalCosts = getTotalCosts();
+        outputText.append(String.format("\nTotal costs: %.2f PLN", totalCosts));
+    }
+
+    private void showPurchasedInfo(int purchasedItems, int allItems) {
         String purchased = String.format("Progress %d/%d", purchasedItems, allItems);
         outputText.setText(purchased);
     }
 
-    private int getPurchasedItemsCount() {
-        return new Select().from(Product.class).where("is_purchased != 0").count();
+    private double getFruitsTotalCosts() {
+        return DbHelper.getDoubleFromRawQuery(
+                "SELECT sum(price * count) AS count FROM 'products' AS 'p'" +
+                        "JOIN 'categories' AS 'c' ON c.id == p.category " +
+                        "WHERE c.cname LIKE \"Owoce\"");
     }
 
-    private int getAllItemsCount() { // liczba wszystkich elementów
+    private double getTotalCosts() {
+//        return DbHelper.getDoubleFromRawQuery("SELECT count(*) AS count from 'products'");
+        return DbHelper.getDoubleFromRawQuery("SELECT sum(price * count) AS count from 'products'");
+    }
+
+
+
+    private int getPurchasedItemsCount() {
+        return new Select().from(Product.class)
+                .where("is_purchased != 0")
+                .count();
+    }
+
+    private int getAllItemsCount() {
         return new Select().from(Product.class).count();
     }
 }

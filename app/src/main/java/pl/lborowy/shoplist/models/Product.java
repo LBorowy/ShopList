@@ -2,11 +2,13 @@ package pl.lborowy.shoplist.models;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
 /**
  * Created by RENT on 2017-07-28.
  */
 
+@Table(name = "products")
 public class Product extends Model {
 
     @Column(name = "name", notNull = true)
